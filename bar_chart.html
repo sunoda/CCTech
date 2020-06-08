@@ -41,11 +41,11 @@
     <script>
       // year bar chart
       (function () {
-        // set the dimensions and margins of the graph
+        // 設定margin與寬高
         let margin = { top: 30, right: 30, bottom: 40, left: 60 },
           width = 460 - margin.left - margin.right,
           height = 400 - margin.top - margin.bottom;
-        // append the svg object to the body of the page
+        // 新增主要區塊至頁面
         let svg = d3
           .select("#year")
           .append("svg")
@@ -56,7 +56,7 @@
             "transform",
             "translate(" + margin.left + "," + margin.top + ")"
           );
-        // Parse the Data
+        // 引入資料
         d3.csv("./cars.csv").then(function (data) {
           // 資料整理成所需格式
           // 第一版資料 純數量與年份
