@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Pie chart</title>
+    <style>
+      #app, #pie{
+        display: inline-block;
+      }
+      #carText{
+        margin: 20px 0;
+        text-align: center;
+      }
+      div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 100px;
+        height: 56px;
+        padding: 2px;
+        font: 12px sans-serif;
+        line-height: 28px;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <div id="pie">
+      </div>
+      <div id="carText">
+        <span>2012-2016年電動車廠牌占比</span>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      (function () {
+        d3.csv("./cars.csv").then(function (data) {
+          // 資料整理成所需格式
+          let MakeCount = (function (data) {
+            let Brand = new Array();
+            let BrandCount = new Array();
+            data.forEach((el) => {
+              if (Brand.includes(el.Make) != true) {
+                Brand.push(el.Make);
+                BrandCount.push({ Brand: el.Make, BCount: 1 });
+              } else {
+                for (let i in BrandCount) {
+                  if (el.Make == BrandCount[i].Brand) {
+                    BrandCount[i].BCount++;
+                  }
+                }
+              }
+            });
+            return BrandCount;
+          })(data);
+          // 資料總筆數
+          let total = data.length;
+          // 設定 廠牌顏色
+          let chartColor = {
+            MITSUBISHI: {
+              color: "rgb(127, 201, 127)"
+            },
+            TESLA: {
+              color: "rgb(190, 174, 212)"
+            },
+            FORD: {
+              color: "rgb(253, 192, 134)"
+            },
+            NISSAN: {
+              color: "rgb(255, 255, 153)"
+            },
+            SMART: {
+              color: "rgb(56, 108, 176)"
+            },
+            BMW: {
+              color: "rgb(240, 2, 127)"
+            },
+            CHEVROLET: {
+              color: "rgb(191, 91, 23)"
+            },
+            KIA: {
+              color: "rgb(102, 102, 102)"
+            }
+          };
+          //重構資料, 將顏色與百分比加入
+          let newData = MakeCount.map((el, i) => ({
+            Brand: el.Brand,
+            BCount: el.BCount,
+            Color: chartColor[el.Brand].color,
+            Percent: ((el.BCount / total) * 100).toFixed(1) + "%"
+          }));
+          //預設hover選擇器
+          let div = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+          //餅圖func
+          let pieFunc = d3.pie();
+          //設定寬高
+          let width = 600,
+              height = width;
+          //圓的半徑, 弧
+          let arc = d3
+            .arc()
+            .innerRadius(0)
+            .outerRadius(width / 2);
+          //選擇主要區塊
+          const svg = d3
+            .select("#pie")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("transform", `translate(${width / 2}, ${height / 2})`);
+          //新增資料並構圖
+          let arcs = svg
+            .selectAll("path")
+            .data(pieFunc(newData.map((d) => d.BCount)))
+            .enter()
+            .append("g")
+            .append("path")
+            .attr("d", arc)
+            .attr("fill", (d) => newData[d.index].Color)
+          //hover效果
+            .on("mouseover", function (d) {
+              div.transition().duration(200).style("opacity", 0.9);
+              div
+                .html(newData[d.index].Brand + '<br>' + newData[d.index].BCount + '台')
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY - 28 + "px");
+            })
+            .on("mouseout", function (d) {
+              div.transition().duration(500).style("opacity", 0);
+            });
+          //圖片新增文字%數
+          d3.select("g")
+            .selectAll("text")
+            .data(pieFunc(newData.map((d) => d.BCount)))
+            .enter()
+            .append("text")
+            .each(function (d) {
+              let centroid = arc.centroid(d);
+              d3.select(this)
+                .attr("x", centroid[0] * 1.7)
+                .attr("y", centroid[1] * 1.7)
+                // .attr("dy", "-.5em")
+                .attr("dx", "-1.3em")
+                .attr("text-align", "right")
+                .text(
+                  (d) => `
+              ${newData[d.index].Percent}
+              `
+                );
+            })
+        });
+      })();
+    </script>
+  </body>
+</html>

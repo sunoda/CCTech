@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>kW average By Size</title>
+    <style>
+      #app,
+      svg {
+        display: inline-block;
+      }
+      #carText {
+        margin: 20px 0;
+        text-align: center;
+      }
+      .bar {
+        fill: steelblue;
+      }
+      .bar:hover {
+        fill: brown;
+      }
+      .axis--x path {
+        display: none;
+      }
+      div.tooltip {
+        position: absolute;
+        text-align: center;
+        width: 60px;
+        height: 28px;
+        padding: 2px;
+        font: 12px sans-serif;
+        line-height: 28px;
+        background: lightsteelblue;
+        border: 0px;
+        border-radius: 8px;
+        pointer-events: none;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <svg width="960" height="600"></svg>
+      <div id="carText">
+        <span>2012-2016年電動車平均馬力(kW)</span>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      (function () {
+        d3.csv("./cars.csv").then(function (data) {
+          // 資料整理成所需格式
+          let kW = (function (el) {
+            let Size = new Array();
+            let SizeKW = new Array();
+            el.forEach((el) => {
+              if (Size.includes(el.Size) != true) {
+                Size.push(el.Size);
+                SizeKW.push({
+                  Size: el.Size,
+                  kW: +el["(kW)"],
+                  count: 1,
+                  avg: +el["(kW"] / 1
+                });
+              } else {
+                for (let i in SizeKW) {
+                  if (el.Size == SizeKW[i].Size) {
+                    SizeKW[i].count++;
+                    SizeKW[i].kW += +el["(kW)"];
+                    SizeKW[i].avg = (SizeKW[i].kW / SizeKW[i].count).toFixed(1);
+                  }
+                }
+              }
+            });
+            return SizeKW;
+          })(data);
+          //設定主選擇器,margin與寬高
+          let svg = d3.select("svg"),
+            margin = { top: 20, right: 20, bottom: 30, left: 40 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+          //定義X,Y軸
+          let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+              y = d3.scaleLinear().rangeRound([height, 0]);
+          let yArr = kW.map((d) => +d.avg);
+          let yMax = (d3.max(yArr) / 100).toFixed() * 100;
+          x.domain(kW.map((d) => d.Size));
+          y.domain([0, yMax]);
+          //新增標籤並移動圖片中心
+          let g = svg
+            .append("g")
+            .attr(
+              "transform",
+              "translate(" + margin.left + "," + margin.top + ")"
+            );
+          //設定x軸
+          g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+          //設定Y軸座標
+          g.append("g").call(d3.axisLeft(y));
+          //Hover選擇器
+          let div = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+          //輸入資料並構圖
+          g.selectAll(".bar")
+            .data(kW)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) {
+              return x(d.Size);
+            })
+            .attr("y", function (d) {
+              return y(d.avg);
+            })
+            .attr("width", x.bandwidth())
+            .attr("height", function (d) {
+              return height - y(d.avg);
+            })
+            //Hover效果資訊
+            .on("mouseover", function (d) {
+              div.transition().duration(200).style("opacity", 0.9);
+              div
+                .html(d.avg + " kW")
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY - 28 + "px");
+            })
+            .on("mouseout", function (d) {
+              div.transition().duration(500).style("opacity", 0);
+            });
+        });
+      })();
+    </script>
+  </body>
+</html>
