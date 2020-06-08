@@ -66,10 +66,13 @@
                   if (el.Size == SizeKW[i].Size) {
                     SizeKW[i].count++;
                     SizeKW[i].kW += +el["(kW)"];
-                    SizeKW[i].avg = (SizeKW[i].kW / SizeKW[i].count).toFixed(1);
+                    SizeKW[i].avg = +(SizeKW[i].kW / SizeKW[i].count).toFixed(1);
                   }
                 }
               }
+            });
+            SizeKW.sort((a, b) => {
+              return a.avg > b.avg ? 1 : -1;
             });
             return SizeKW;
           })(data);
