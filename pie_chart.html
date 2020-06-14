@@ -30,8 +30,7 @@
   </head>
   <body>
     <div id="app">
-      <div id="pie">
-      </div>
+      <div id="pie"></div>
       <div id="carText">
         <span>2012-2016年電動車廠牌占比</span>
       </div>
@@ -138,6 +137,8 @@
             .on("mouseout", function (d) {
               div.transition().duration(500).style("opacity", 0);
             });
+            console.log(pieFunc(newData.map((d) => d.BCount)));
+            
           //圖片新增文字%數
           d3.select("g")
             .selectAll("text")
@@ -147,8 +148,8 @@
             .each(function (d) {
               let centroid = arc.centroid(d);
               d3.select(this)
-                .attr("x", centroid[0] * 1.7)
-                .attr("y", centroid[1] * 1.7)
+                .attr("x", centroid[0] * 1)
+                .attr("y", centroid[1] * 1)
                 // .attr("dy", "-.5em")
                 .attr("dx", "-1.3em")
                 .attr("text-align", "right")

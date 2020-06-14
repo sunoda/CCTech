@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>長青資訊-電動車</title>
+    <style>
+      body {
+        margin: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: gray;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .tab {
+        width: 900px;
+      }
+      .tab-btns {
+        display: flex;
+      }
+      .tab-btn {
+        flex: 1;
+        text-align: center;
+        background-color: lightgray;
+        padding: 30px;
+        border: 3px black solid;
+        border-radius: 10px 10px 0 0;
+      }
+      .tab-btn:nth-child(1),
+      .tab-btn:nth-child(2) {
+        border-right: 0;
+      }
+      .tab-btn.active {
+        background-color: white;
+        border-bottom: 0;
+      }
+      .tab-content {
+        background-color: white;
+        padding: 30px;
+        border: 3px black solid;
+        border-top: 0;
+        border-radius: 0 0 10px 10px;
+        display: none;
+      }
+      .tab-content.active, #year,
+      #pieChart,
+      #kW{
+        display: flex;
+        flex-direction: column;
+        margin: auto;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="tab">
+      <div class="tab-btns">
+        <div class="tab-btn active">年度發表數量</div>
+        <div class="tab-btn">各家廠牌數量</div>
+        <div class="tab-btn">平均馬力</div>
+      </div>
+      <div class="tab-contents">
+        <div class="tab-content active">
+          <h1>2012-2016年電動車發表數量</h1>
+          <div id="year"></div>
+        </div>
+        <div class="tab-content">
+          <h1>2012-2016年電動車廠牌占比</h1>
+          <div id="pieChart">
+            <div id="pie"></div>
+          </div>
+        </div>
+        <div class="tab-content">
+          <h1>2012-2016年電動車平均馬力(kW)</h1>
+          <div id="kWChart">
+            <svg id="kW" width="800" height="500"></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+    <script>
+      (function () {
+        // 設定margin與寬高
+        let margin = { top: 30, right: 30, bottom: 40, left: 60 },
+          width = 460 - margin.left - margin.right,
+          height = 400 - margin.top - margin.bottom;
+        // 新增主要區塊至頁面
+        let svg = d3
+          .select("#year")
+          .append("svg")
+          .attr("width", width + margin.left + margin.right)
+          .attr("height", height + margin.top + margin.bottom)
+          .append("g")
+          .attr(
+            "transform",
+            "translate(" + margin.left + "," + margin.top + ")"
+          );
+        // 引入資料
+        d3.csv("./cars.csv").then(function (data) {
+          // 資料整理成所需格式
+          // 第一版資料 純數量與年份
+          let yearCount = (function (p) {
+            let year = new Array();
+            let year_count = new Array();
+            p.forEach((e) => {
+              if (year.includes(e.YEAR) != true) {
+                year.push(e.YEAR);
+                year_count.push({ YEAR: e.YEAR, count: 1 });
+              } else {
+                for (let i in year_count) {
+                  if (e.YEAR == year_count[i].YEAR) {
+                    year_count[i].count += 1;
+                  }
+                }
+              }
+            });
+            return year_count;
+          })(data);
+          // 第二版資料 加入廠牌數量, 用於hover效果
+          let newData = (function (data) {
+            let year = new Array();
+            let year_count = new Array();
+            data.forEach((e) => {
+              if (year.includes(e.YEAR) != true) {
+                year.push(e.YEAR);
+                year_count.push({
+                  YEAR: e.YEAR,
+                  count: 1,
+                  Brand: [{ Brand: e.Make, count: 1 }],
+                  Make: [e.Make]
+                });
+              } else {
+                for (let i in year_count) {
+                  if (e.YEAR == year_count[i].YEAR) {
+                    year_count[i].count += 1;
+                    if (year_count[i].Make.includes(e.Make)) {
+                      year_count[i].Brand.count++;
+                    } else {
+                      year_count[i].Make.push(e.Make);
+                      year_count[i].Brand.push({ Brand: e.Make, count: 1 });
+                    }
+                  }
+                }
+              }
+            });
+            return year_count;
+          })(data);
+          console.log(newData);
+
+          //設定X軸
+          let x = d3
+            .scaleBand()
+            .range([0, width])
+            .domain(
+              yearCount.map(function (d) {
+                return d.YEAR;
+              })
+            )
+            .padding(0.7);
+          svg
+            .append("g")
+            .attr("transform", "translate(0, " + height + ")")
+            .call(d3.axisBottom(x))
+            .selectAll("text")
+            .attr("transform", "translate(0, 0)")
+            .style("text-anchor", "middle");
+
+          //設定Y軸
+          let y = d3.scaleLinear().domain([0, 20]).range([height, 0]);
+          svg.append("g").call(d3.axisLeft(y));
+          let div = d3
+            .select("body")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+          // 新增資料
+          svg
+            .selectAll("my_bar")
+            .data(newData)
+            .enter()
+            .append("rect")
+            .attr("x", function (d) {
+              return x(d["YEAR"]);
+            })
+            .attr("y", function (d) {
+              return (20 - d.count) * (height / 20);
+            })
+            .attr("width", 20)
+            .attr("height", function (d) {
+              return (height / 20) * d.count;
+            })
+            .attr("fill", "#69b3a2")
+            //hover效果
+            .on("mouseover", function (d) {
+              div.transition().duration(200).style("opacity", 0.9);
+              div
+                .html(newData.Brand[0].Brand + newData.Brand[0].count)
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY - 28 + "px");
+            })
+            .on("mouseout", function (d) {
+              div.transition().duration(500).style("opacity", 0);
+            });
+        });
+      })();
+      (function () {
+        d3.csv("./cars.csv").then(function (data) {
+          // 資料整理成所需格式
+          let MakeCount = (function (data) {
+            let Brand = new Array();
+            let BrandCount = new Array();
+            data.forEach((el) => {
+              if (Brand.includes(el.Make) != true) {
+                Brand.push(el.Make);
+                BrandCount.push({ Brand: el.Make, BCount: 1 });
+              } else {
+                for (let i in BrandCount) {
+                  if (el.Make == BrandCount[i].Brand) {
+                    BrandCount[i].BCount++;
+                  }
+                }
+              }
+            });
+            return BrandCount;
+          })(data);
+          // 資料總筆數
+          let total = data.length;
+          // 設定 廠牌顏色
+          let chartColor = {
+            MITSUBISHI: {
+              color: "rgb(127, 201, 127)"
+            },
+            TESLA: {
+              color: "rgb(190, 174, 212)"
+            },
+            FORD: {
+              color: "rgb(253, 192, 134)"
+            },
+            NISSAN: {
+              color: "rgb(255, 255, 153)"
+            },
+            SMART: {
+              color: "rgb(56, 108, 176)"
+            },
+            BMW: {
+              color: "rgb(240, 2, 127)"
+            },
+            CHEVROLET: {
+              color: "rgb(191, 91, 23)"
+            },
+            KIA: {
+              color: "rgb(102, 102, 102)"
+            }
+          };
+          //重構資料, 將顏色與百分比加入
+          let newData = MakeCount.map((el, i) => ({
+            Brand: el.Brand,
+            BCount: el.BCount,
+            Color: chartColor[el.Brand].color,
+            Percent: ((el.BCount / total) * 100).toFixed(1) + "%"
+          }));
+          //預設hover選擇器
+          let div = d3
+            .select("#pieChart")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+          //餅圖func
+          let pieFunc = d3.pie();
+          //設定寬高
+          let width = 400,
+            height = width;
+          //圓的半徑, 弧
+          let arc = d3
+            .arc()
+            .innerRadius(0)
+            .outerRadius(width / 2);
+          //選擇主要區塊
+          const svg = d3
+            .select("#pie")
+            .append("svg")
+            .attr("width", width)
+            .attr("height", height)
+            .append("g")
+            .attr("class", "pie_g")
+            .attr("transform", `translate(${width / 2}, ${height / 2})`);
+          //新增資料並構圖
+          let arcs = svg
+            .selectAll("path")
+            .data(pieFunc(newData.map((d) => d.BCount)))
+            .enter()
+            .append("g")
+            .append("path")
+            .attr("d", arc)
+            .attr("fill", (d) => newData[d.index].Color)
+            //hover效果
+            .on("mouseover", function (d) {
+              div.transition().duration(200).style("opacity", 0.9);
+              div
+                .html(
+                  newData[d.index].Brand +
+                    "<br>" +
+                    newData[d.index].BCount +
+                    "台"
+                )
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY - 28 + "px");
+            })
+            .on("mouseout", function (d) {
+              div.transition().duration(500).style("opacity", 0);
+            });
+          //圖片新增文字%數
+          let aa = d3
+            .select(".pie_g")
+            .selectAll("text")
+            .data(pieFunc(newData.map((d) => d.BCount)))
+            .enter()
+            .append("text")
+            .each(function (d) {
+              let centroid = arc.centroid(d);
+              d3.select(this)
+                .attr("x", centroid[0] * 1.7)
+                .attr("y", centroid[1] * 1.7)
+                // .attr("dy", "-.5em")
+                .attr("dx", "-1.3em")
+                .attr("text-align", "right")
+                .text(
+                  (d) => `
+                ${newData[d.index].Percent}
+                `
+                );
+            });
+        });
+      })();
+      (function () {
+        d3.csv("./cars.csv").then(function (data) {
+          // 資料整理成所需格式
+          let kW = (function (el) {
+            let Size = new Array();
+            let SizeKW = new Array();
+            el.forEach((el) => {
+              if (Size.includes(el.Size) != true) {
+                Size.push(el.Size);
+                SizeKW.push({
+                  Size: el.Size,
+                  kW: +el["(kW)"],
+                  count: 1,
+                  avg: +el["(kW"] / 1
+                });
+              } else {
+                for (let i in SizeKW) {
+                  if (el.Size == SizeKW[i].Size) {
+                    SizeKW[i].count++;
+                    SizeKW[i].kW += +el["(kW)"];
+                    SizeKW[i].avg = +(SizeKW[i].kW / SizeKW[i].count).toFixed(
+                      1
+                    );
+                  }
+                }
+              }
+            });
+            SizeKW.sort((a, b) => {
+              return a.avg > b.avg ? 1 : -1;
+            });
+            return SizeKW;
+          })(data);
+          //設定主選擇器,margin與寬高
+          let svg = d3.select("#kW"),
+            margin = { top: 20, right: 20, bottom: 30, left: 40 },
+            width = +svg.attr("width") - margin.left - margin.right,
+            height = +svg.attr("height") - margin.top - margin.bottom;
+          //定義X,Y軸
+          let x = d3.scaleBand().rangeRound([0, width]).padding(0.1),
+            y = d3.scaleLinear().rangeRound([height, 0]);
+          let yArr = kW.map((d) => +d.avg);
+          let yMax = (d3.max(yArr) / 100).toFixed() * 100;
+          x.domain(kW.map((d) => d.Size));
+          y.domain([0, yMax]);
+          //新增標籤並移動圖片中心
+          let g = svg
+            .append("g")
+            .attr(
+              "transform",
+              "translate(" + margin.left + "," + margin.top + ")"
+            );
+          //設定x軸
+          g.append("g")
+            .attr("class", "axis axis--x")
+            .attr("transform", "translate(0," + height + ")")
+            .call(d3.axisBottom(x));
+          //設定Y軸座標
+          g.append("g").call(d3.axisLeft(y));
+          //Hover選擇器
+          let div = d3
+            .select("#kWChart")
+            .append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+          //輸入資料並構圖
+          g.selectAll(".bar")
+            .data(kW)
+            .enter()
+            .append("rect")
+            .attr("class", "bar")
+            .attr("x", function (d) {
+              return x(d.Size);
+            })
+            .attr("y", function (d) {
+              return y(d.avg);
+            })
+            .attr("width", x.bandwidth())
+            .attr("height", function (d) {
+              return height - y(d.avg);
+            })
+            //Hover效果資訊
+            .on("mouseover", function (d) {
+              div.transition().duration(200).style("opacity", 0.9);
+              div
+                .html(d.avg + " kW")
+                .style("left", d3.event.pageX + "px")
+                .style("top", d3.event.pageY - 28 + "px");
+            })
+            .on("mouseout", function (d) {
+              div.transition().duration(500).style("opacity", 0);
+            });
+        });
+      })();
+      let btns = document.querySelectorAll(".tab-btn");
+      let contents = document.querySelectorAll(".tab-content");
+
+      for (j = 0; j < btns.length; j++) {
+        const btn = btns[j];
+        const content = contents[j];
+        console.log(btn, content);
+
+        btn.onclick = function () {
+          removeClass();
+          btn.classList.add("active");
+          content.classList.add("active");
+        };
+      }
+      function removeClass() {
+        for (i = 0; i < 3; i++) {
+          btns[i].classList.remove("active");
+          contents[i].classList.remove("active");
+        }
+      }
+    </script>
+  </body>
+</html>

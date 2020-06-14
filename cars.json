@@ -1,0 +1,373 @@
+[
+  {
+    "YEAR": 2012,
+    "Make": "MITSUBISHI",
+    "Model": "i-MiEV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 49
+  },
+  {
+    "YEAR": 2012,
+    "Make": "NISSAN",
+    "Model": "LEAF",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2013,
+    "Make": "FORD",
+    "Model": "FOCUS ELECTRIC",
+    "Size": "COMPACT",
+    "(kW)": 107
+  },
+  {
+    "YEAR": 2013,
+    "Make": "MITSUBISHI",
+    "Model": "i-MiEV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 49
+  },
+  {
+    "YEAR": 2013,
+    "Make": "NISSAN",
+    "Model": "LEAF",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2013,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE CABRIOLET",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2013,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE COUPE",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2013,
+    "Make": "TESLA",
+    "Model": "MODEL S (40 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 270
+  },
+  {
+    "YEAR": 2013,
+    "Make": "TESLA",
+    "Model": "MODEL S (60 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 270
+  },
+  {
+    "YEAR": 2013,
+    "Make": "TESLA",
+    "Model": "MODEL S (85 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 270
+  },
+  {
+    "YEAR": 2013,
+    "Make": "TESLA",
+    "Model": "MODEL S PERFORMANCE",
+    "Size": "FULL-SIZE",
+    "(kW)": 310
+  },
+  {
+    "YEAR": 2014,
+    "Make": "CHEVROLET",
+    "Model": "SPARK EV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 104
+  },
+  {
+    "YEAR": 2014,
+    "Make": "FORD",
+    "Model": "FOCUS ELECTRIC",
+    "Size": "COMPACT",
+    "(kW)": 107
+  },
+  {
+    "YEAR": 2014,
+    "Make": "MITSUBISHI",
+    "Model": "i-MiEV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 49
+  },
+  {
+    "YEAR": 2014,
+    "Make": "NISSAN",
+    "Model": "LEAF",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2014,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE CABRIOLET",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2014,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE COUPE",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2014,
+    "Make": "TESLA",
+    "Model": "MODEL S (60 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 225
+  },
+  {
+    "YEAR": 2014,
+    "Make": "TESLA",
+    "Model": "MODEL S (85 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 270
+  },
+  {
+    "YEAR": 2014,
+    "Make": "TESLA",
+    "Model": "MODEL S PERFORMANCE",
+    "Size": "FULL-SIZE",
+    "(kW)": 310
+  },
+  {
+    "YEAR": 2015,
+    "Make": "BMW",
+    "Model": "i3",
+    "Size": "SUBCOMPACT",
+    "(kW)": 125
+  },
+  {
+    "YEAR": 2015,
+    "Make": "CHEVROLET",
+    "Model": "SPARK EV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 104
+  },
+  {
+    "YEAR": 2015,
+    "Make": "FORD",
+    "Model": "FOCUS ELECTRIC",
+    "Size": "COMPACT",
+    "(kW)": 107
+  },
+  {
+    "YEAR": 2015,
+    "Make": "KIA",
+    "Model": "SOUL EV",
+    "Size": "STATION WAGON - SMALL",
+    "(kW)": 81
+  },
+  {
+    "YEAR": 2015,
+    "Make": "MITSUBISHI",
+    "Model": "i-MiEV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 49
+  },
+  {
+    "YEAR": 2015,
+    "Make": "NISSAN",
+    "Model": "LEAF",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2015,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE CABRIOLET",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2015,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE COUPE",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S (60 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S (70 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S (85/90 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S 70D",
+    "Size": "FULL-SIZE",
+    "(kW)": 280
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S 85D/90D",
+    "Size": "FULL-SIZE",
+    "(kW)": 280
+  },
+  {
+    "YEAR": 2015,
+    "Make": "TESLA",
+    "Model": "MODEL S P85D/P90D",
+    "Size": "FULL-SIZE",
+    "(kW)": 515
+  },
+  {
+    "YEAR": 2016,
+    "Make": "BMW",
+    "Model": "i3",
+    "Size": "SUBCOMPACT",
+    "(kW)": 125
+  },
+  {
+    "YEAR": 2016,
+    "Make": "CHEVROLET",
+    "Model": "SPARK EV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 104
+  },
+  {
+    "YEAR": 2016,
+    "Make": "FORD",
+    "Model": "FOCUS ELECTRIC",
+    "Size": "COMPACT",
+    "(kW)": 107
+  },
+  {
+    "YEAR": 2016,
+    "Make": "KIA",
+    "Model": "SOUL EV",
+    "Size": "STATION WAGON - SMALL",
+    "(kW)": 81
+  },
+  {
+    "YEAR": 2016,
+    "Make": "MITSUBISHI",
+    "Model": "i-MiEV",
+    "Size": "SUBCOMPACT",
+    "(kW)": 49
+  },
+  {
+    "YEAR": 2016,
+    "Make": "NISSAN",
+    "Model": "LEAF (24 kWh battery)",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2016,
+    "Make": "NISSAN",
+    "Model": "LEAF (30 kWh battery)",
+    "Size": "MID-SIZE",
+    "(kW)": 80
+  },
+  {
+    "YEAR": 2016,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE CABRIOLET",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2016,
+    "Make": "SMART",
+    "Model": "FORTWO ELECTRIC DRIVE COUPE",
+    "Size": "TWO-SEATER",
+    "(kW)": 35
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S (60 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S (70 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S (85/90 kWh battery)",
+    "Size": "FULL-SIZE",
+    "(kW)": 283
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S 70D",
+    "Size": "FULL-SIZE",
+    "(kW)": 386
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S 85D/90D",
+    "Size": "FULL-SIZE",
+    "(kW)": 386
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S 90D (Refresh)",
+    "Size": "FULL-SIZE",
+    "(kW)": 386
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S P85D/P90D",
+    "Size": "FULL-SIZE",
+    "(kW)": 568
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL S P90D (Refresh)",
+    "Size": "FULL-SIZE",
+    "(kW)": 568
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL X 90D",
+    "Size": "SUV - STANDARD",
+    "(kW)": 386
+  },
+  {
+    "YEAR": 2016,
+    "Make": "TESLA",
+    "Model": "MODEL X P90D",
+    "Size": "SUV - STANDARD",
+    "(kW)": 568
+  }
+]
